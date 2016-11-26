@@ -1,0 +1,35 @@
+{
+  "name": "d3-graph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --config webpack.config.js --progress",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/G-MontaG/D3-graph.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/G-MontaG/D3-graph/issues"
+  },
+  "homepage": "https://github.com/G-MontaG/D3-graph#readme",
+  "dependencies": {
+    "d3": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^4.3.0",
+    "@types/node": "^6.0.51",
+    "awesome-typescript-loader": "^3.0.0-beta.9",
+    "clean-webpack-plugin": "^0.1.14",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.24.1",
+    "raw-loader": "^0.5.1",
+    "typescript": "^2.0.10",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-server": "^2.1.0-beta.9"
+  }
+}
