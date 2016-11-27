@@ -1,10 +1,12 @@
 'use strict';
 const path = require('path');
 const webpack = require("webpack");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
-const {HotModuleReplacementPlugin} = require('webpack');
+const {HotModuleReplacementPlugin, LoaderOptionsPlugin} = require('webpack');
 
 module.exports = {
   cache: true,
@@ -14,7 +16,7 @@ module.exports = {
   devtool: 'source-map',
   context: path.join(__dirname, "src"),
   entry: {
-    main: "./main.ts",
+    main: "./graph.ts",
   },
   output: {
     path: path.join(__dirname, 'public'),
@@ -34,6 +36,14 @@ module.exports = {
         exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({fallbackLoader: 'style', loader: ['css']})
+      },
+      {
+        test: /\.(scss|sass)$/,
+        loader: ExtractTextPlugin.extract({fallbackLoader: 'style', loader: ['css?sourceMap&importLoaders=2!postcss!sass?sourceMap']})
+      },
+      {
         test: /\.json$/,
         loader: 'json?name=data/[name].[ext]'
       },
@@ -49,6 +59,11 @@ module.exports = {
     ]
   },
   plugins: [
+    new ExtractTextPlugin({
+      filename: "[name].css",
+      disable: false,
+      allChunks: true
+    }),
     new HtmlWebpackPlugin({
       template: './index.html',
       inject: 'body',
@@ -56,7 +71,16 @@ module.exports = {
     }),
     new CleanWebpackPlugin(['./public']),
     new TsConfigPathsPlugin(/* { tsconfig, compiler } */),
-    new HotModuleReplacementPlugin()
+    new HotModuleReplacementPlugin(),
+    new LoaderOptionsPlugin({
+      debug: true,
+      options: {
+        context: __dirname,
+        postcss: [
+          autoprefixer({browsers: ['last 3 version']})
+        ],
+      },
+    })
   ],
   devServer: {
     port: 3300,
