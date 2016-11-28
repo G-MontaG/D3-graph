@@ -1,11 +1,11 @@
 import './graph.scss';
 
 import * as d3 from "d3";
-import {Node} from "./components/node.model";
+import {Node} from "../node/node.model";
 import {Observable} from "rxjs";
-import {ContextMenu} from "./components/context-menu";
+import {ContextMenu} from "../context-menu";
 
-class Graph {
+export class GraphService {
     private graph;
 
     private width;
@@ -105,5 +105,3 @@ class Graph {
         });
     }
 }
-
-new Graph("#graph");

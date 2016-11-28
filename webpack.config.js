@@ -16,7 +16,7 @@ module.exports = {
   devtool: 'source-map',
   context: path.join(__dirname, "src"),
   entry: {
-    main: "./graph.ts",
+    main: "./flow.ts",
   },
   output: {
     path: path.join(__dirname, 'public'),
@@ -29,31 +29,34 @@ module.exports = {
     modules: [path.join(__dirname, "node_modules")],
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.ts$/,
-        loaders: ['awesome-typescript-loader'],
+        use: ['awesome-typescript-loader'],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({fallbackLoader: 'style', loader: ['css']})
+        loader: ExtractTextPlugin.extract({fallbackLoader: 'style-loader', loader: ['css-loader']})
       },
       {
         test: /\.(scss|sass)$/,
-        loader: ExtractTextPlugin.extract({fallbackLoader: 'style', loader: ['css?sourceMap&importLoaders=2!postcss!sass?sourceMap']})
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: ['css-loader?sourceMap-loader&importLoaders=2!postcss-loader!sass-loader?sourceMap-loader']
+        })
       },
       {
         test: /\.json$/,
-        loader: 'json?name=data/[name].[ext]'
+        use: 'json-loader?name=data/[name].[ext]'
       },
       {
         test: /index\.html$/,
-        loader: 'html-loader'
+        use: 'html-loader'
       },
       {
         test: /\.html$/,
-        loader: 'raw-loader',
+        use: 'raw-loader',
         exclude: path.join(__dirname, "src", "index.html")
       }
     ]
@@ -90,7 +93,6 @@ module.exports = {
       aggregateTimeout: 300,
       poll: 1000
     },
-    outputPath: path.join(__dirname, "public"),
     compress: true,
     contentBase: './src',
     hot: true,
