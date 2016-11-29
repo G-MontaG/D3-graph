@@ -1,7 +1,7 @@
 import {GraphService} from "./components/graph/graph";
 import {NodeService} from "./components/node/node.service";
 
-class Flow {
+export class Flow {
     private graphService: GraphService;
     private nodeService: NodeService;
 
@@ -9,7 +9,7 @@ class Flow {
         graphConfig: [
             {
                 title: 'Add',
-                action: this.addNode
+                action: this.addNode.bind(this)
             }
         ],
         nodesConfig: [
@@ -25,9 +25,10 @@ class Flow {
         this.nodeService = new NodeService(this.graphService);
     }
 
-    public addNode(elm, node: Node, i) {
-
+    public addNode(event: MouseEvent, i: number) {
+        console.log(this);
+        this.nodeService.addNode(event, i)
     }
 }
 
-new Flow();
+let flow = new Flow();

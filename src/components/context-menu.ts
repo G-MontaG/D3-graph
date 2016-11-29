@@ -20,8 +20,6 @@ export class ContextMenu {
 
         // this gets executed when a contextmenu event occurs
         return (data, index) => {
-            let elm = this;
-
             this.d3.selectAll('.d3-context-menu').html('');
             let list = this.d3.selectAll('.d3-context-menu').append('ul');
             list.selectAll('li').data(menu).enter()
@@ -30,13 +28,13 @@ export class ContextMenu {
                     return d.title;
                 })
                 .on('click', (d, i) => {
-                    d.action(elm, data, index);
+                    d.action(data || this.d3.event, index || i);
                     this.d3.select('.d3-context-menu').style('display', 'none');
                 });
 
             // the openCallback allows an action to fire before the menu is displayed
             // an example usage would be closing a tooltip
-            if (openCallback) openCallback(data, index);
+            if (openCallback) openCallback(data || this.d3.event, index);
 
             // display context menu
             this.d3.select('.d3-context-menu')

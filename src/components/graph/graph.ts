@@ -5,16 +5,16 @@ import {Observable} from "rxjs";
 import {ContextMenu} from "../context-menu";
 
 export class GraphService {
-    private graph;
+    public graph;
+    public nodes;
+    public simulation;
 
-    private width;
-    private height;
+    public width;
+    public height;
 
-    private color = d3.scaleOrdinal(d3.schemeCategory20);
+    public color = d3.scaleOrdinal(d3.schemeCategory20);
 
-    private simulation;
-
-    private menu;
+    public menu;
     private menuGraph;
     private menuNodes;
 
@@ -68,13 +68,12 @@ export class GraphService {
         });
 
         dataRequest.subscribe((json: any) => {
-            let node = this.graph.append("g")
+            this.nodes = this.graph.append("g")
                 .attr("class", "nodes")
                 .selectAll("circle")
                 .data(json.nodes)
                 .enter().append("circle")
                 .attr("r", 5)
-                .attr("style", "z-index: 2")
                 .attr("fill", (d: Node) => {
                     return this.color(d.group);
                 })
@@ -86,7 +85,7 @@ export class GraphService {
                 })
                 .on('contextmenu', this.menuNodes.contextMenu(this.menu.nodesConfig));
 
-            node.append("title")
+            this.nodes.append("title")
                 .text((d: Node) => {
                     return d.id;
                 });
