@@ -45,6 +45,7 @@ export class ContextMenu {
                 .style('display', 'block');
 
             this.d3.event.preventDefault();
+            this.d3.event.stopPropagation();
         };
     }
 }

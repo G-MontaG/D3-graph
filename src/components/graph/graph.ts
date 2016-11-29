@@ -1,5 +1,4 @@
 import './graph.scss';
-
 import * as d3 from "d3";
 import {Node} from "../node/node.model";
 import {Observable} from "rxjs";
@@ -15,28 +14,16 @@ export class GraphService {
 
     private simulation;
 
-    private menuNodesConfig = [
-        {
-            title: 'Item #1',
-            action: function (elm, d, i) {
-                console.log('Item #1 clicked!');
-                console.log('The data for this circle is: ' + d);
-            }
-        },
-        {
-            title: 'Item #2',
-            action: function (elm, d, i) {
-                console.log('You have clicked the second item!');
-                console.log('The data for this circle is: ' + d);
-            }
-        }
-    ];
+    private menu;
+    private menuGraph;
     private menuNodes;
 
-    constructor(selector, width?, height?) {
+    constructor(selector, menu) {
         this.graph = d3.select(selector);
-        this.width = width || +this.graph.attr("width");
-        this.height = height || +this.graph.attr("height");
+        this.width = +this.graph.attr("width");
+        this.height = +this.graph.attr("height");
+
+        this.menu = menu;
 
         this.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id((d: Node) => {
@@ -50,6 +37,9 @@ export class GraphService {
     }
 
     private _initContextMenu() {
+        this.menuGraph = new ContextMenu(d3);
+        this.graph.on('contextmenu', this.menuGraph.contextMenu(this.menu.graphConfig));
+
         this.menuNodes = new ContextMenu(d3);
     }
 
@@ -84,6 +74,7 @@ export class GraphService {
                 .data(json.nodes)
                 .enter().append("circle")
                 .attr("r", 5)
+                .attr("style", "z-index: 2")
                 .attr("fill", (d: Node) => {
                     return this.color(d.group);
                 })
@@ -93,7 +84,7 @@ export class GraphService {
                 .attr("cy", (d: Node) => {
                     return d.y;
                 })
-                .on('contextmenu', this.menuNodes.contextMenu(this.menuNodesConfig));
+                .on('contextmenu', this.menuNodes.contextMenu(this.menu.nodesConfig));
 
             node.append("title")
                 .text((d: Node) => {
